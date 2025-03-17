@@ -1,8 +1,6 @@
 name: Slash Command Dispatch Workflow
 
 on:
-  pull_request:
-    types: [opened, edited, synchronize]
   issue_comment:
     types: [created]
 
