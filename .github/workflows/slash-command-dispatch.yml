@@ -1,6 +1,8 @@
 name: Slash Command Dispatch
 
 on:
+  pull_request:
+    types: [opened, edited, synchronize]
   issue_comment:
     types: [created]
 
