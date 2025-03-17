@@ -1,4 +1,4 @@
-name: Slash Command Dispatch
+name: Slash Command Dispatch Workflow
 
 on:
   pull_request:
