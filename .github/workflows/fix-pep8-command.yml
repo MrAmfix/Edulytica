@@ -1,9 +1,7 @@
 name: fix-pep8-command
-
 on:
   repository_dispatch:
     types: [fix-pep8-command]
-
 jobs:
   fix-pep8:
     runs-on: ubuntu-latest
@@ -17,7 +15,7 @@ jobs:
         id: autopep8
         uses: peter-evans/autopep8@v2
         with:
-          args: --exit-code --recursive --in-place --aggressive --aggressive .
+          args: --exit-code --max-line-length 120 --recursive --in-place --aggressive --aggressive .
       - name: Commit autopep8 changes
         id: cap8c
         if: steps.autopep8.outputs.exit-code == 2

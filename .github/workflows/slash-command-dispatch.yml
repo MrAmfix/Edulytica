@@ -1,9 +1,7 @@
-name: Slash Command Dispatch Workflow
-
+name: Slash Command Dispatch
 on:
   issue_comment:
     types: [created]
-
 jobs:
   slashCommandDispatch:
     runs-on: ubuntu-latest
