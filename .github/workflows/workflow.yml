@@ -1,0 +1,24 @@
+name: PR Comment Listener
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  respond_to_command:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check command
+        env:
+          GITHUB_TOKEN: ${{ secrets.EDULYTICA_TOKEN }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
+          ISSUE_URL: ${{ github.event.comment.issue_url }}
+        run: |
+          if [[ "$COMMENT_BODY" == "/hello" ]]; then
+            RESPONSE="Hello world, @$COMMENT_AUTHOR!"
+            curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+                 -H "Accept: application/vnd.github.v3+json" \
+                 -d "{\"body\": \"$RESPONSE\"}" \
+                 "$ISSUE_URL/comments"
+          fi
