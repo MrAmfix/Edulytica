@@ -30,7 +30,7 @@ class TestTextComparator(unittest.TestCase):
         self.assertEqual(text_comparator.count_percent_of_transformed_words(
             'Yesterday I walked my dog for half an hour.',
             'Thoughts are all charged in favor of the project.'),
-        100.00)
+            100.00)
         self.assertEqual(text_comparator.count_percent_of_transformed_words(
             'This guy just walks there.',
             'I wanna have this ice cream.'),

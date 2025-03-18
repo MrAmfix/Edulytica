@@ -173,13 +173,11 @@ def get_structural_paragraphs(file):
             return
         temp = []
         for i, elem in enumerate(elements):
-            if i<len(elements)-1:
-                temp.append(convert_element_to_dict(elem, p, elements[i+1]))
+            if i < len(elements) - 1:
+                temp.append(convert_element_to_dict(elem, p, elements[i + 1]))
             else:
                 temp.append(convert_element_to_dict(elem, p))
         return temp
-
-
 
     try:
         import io

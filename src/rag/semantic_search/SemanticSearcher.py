@@ -38,7 +38,8 @@ class SemanticSearcher:
         self.texts = texts
         self.fitted = True
 
-    def search(self, query_text: str, return_distance: bool = True) -> Union[List[Dict[str, Union[str, float]]], List[str]]:
+    def search(self, query_text: str,
+               return_distance: bool = True) -> Union[List[Dict[str, Union[str, float]]], List[str]]:
         """
         Searches for semantically similar chunks of text based on a query string.
 

@@ -113,7 +113,6 @@ async def get_result(
         )
 
 
-
 @api_logs(llm_router.get("/file/{file_id}", response_class=FileResponse))
 async def get_file(
     file_id: uuid.UUID,

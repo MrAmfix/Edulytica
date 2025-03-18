@@ -41,6 +41,7 @@ class AuthDataGetterFromToken:
         token_type (str): Expected type of the token (access or refresh).
         secret_key (str): Secret key used for decoding the token.
     """
+
     def __init__(self, token_type: str, secret_key: str):
         self.token_type = token_type
         self.secret_key = secret_key

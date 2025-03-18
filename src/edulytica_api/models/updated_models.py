@@ -53,7 +53,11 @@ class User(Base, AsyncAttrs):
     custom_events: Mapped[List["CustomEvent"]] = relationship('CustomEvent', back_populates='user', lazy='selectin')
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime_now_moscow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime_now_moscow, onupdate=datetime_now_moscow)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(
+            timezone=True),
+        default=datetime_now_moscow,
+        onupdate=datetime_now_moscow)
 
 
 class Document(Base, AsyncAttrs):
@@ -80,7 +84,8 @@ class Ticket(Base, AsyncAttrs):
     user: Mapped["User"] = relationship('User', back_populates='tickets', lazy='selectin')
     document_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('documents.id'), nullable=False)
     document: Mapped["Document"] = relationship('Document', back_populates='tickets', lazy='selectin')
-    ticket_status_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('ticket_statuses.id'), nullable=False)
+    ticket_status_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey('ticket_statuses.id'), nullable=False)
     ticket_status: Mapped["TicketStatus"] = relationship('TicketStatus', lazy='selectin')
 
     comments: Mapped[List["Comment"]] = relationship('Comment', back_populates='ticket', lazy='selectin')
