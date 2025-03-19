@@ -67,7 +67,8 @@ class LLM():
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True)
         self.tokenizer.pad_token = self.tokenizer.eos_token
         self.tokenizer.padding_side = "right"
-        self.generation_config = GenerationConfig.from_pretrained(self.model_name, max_new_tokens=1000)
+        self.generation_config = GenerationConfig.from_pretrained(
+            self.model_name, max_new_tokens=1000)
 
     def generate(self, prompt):
         data = self.tokenizer(prompt, return_tensors="pt", add_special_tokens=False)
