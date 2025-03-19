@@ -1,2 +1,2 @@
 src/edulytica_api/alembic/versions/
-src/data_handling/
+src/data_handling/VKRParser.py
