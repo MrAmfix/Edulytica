@@ -55,13 +55,13 @@ class PDFParser:
                     if pdfs.get(pdf_filename[:-4]):
                         print('skipped')
                     else:
-                        pdfs[pdf_filename[:-
-                                          4]] = self.parse_file(f'{pdfs_directory}/{pdf_filename}')
+                        pdfs[pdf_filename[:- 4]
+                             ] = self.parse_file(f'{pdfs_directory}/{pdf_filename}')
                         print('replaced')
                 else:
                     try:
-                        pdfs[pdf_filename[:-
-                                          4]] = self.parse_file(f'{pdfs_directory}/{pdf_filename}')
+                        pdfs[pdf_filename[:- 4]
+                             ] = self.parse_file(f'{pdfs_directory}/{pdf_filename}')
                         print('done')
                     except pdfminer.pdfparser.PDFSyntaxError:
                         print('pdf can not be opened')
@@ -106,10 +106,12 @@ class PDFParser:
             for i in range(min(2, len(page_elements))):
                 first_element = page_elements[i][1]
                 if isinstance(first_element, LTTextContainer):
-                    line_text, format_for_line = self._extract_text(first_element)
+                    line_text, format_for_line = self._extract_text(
+                        first_element)
                     for form in format_for_line:
                         if isinstance(form, str) and 'bold' in form.lower():
-                            if any(intro_str in line_text.lower() for intro_str in self.intro_strs):
+                            if any(intro_str in line_text.lower()
+                                   for intro_str in self.intro_strs):
                                 has_intro = True
                             if any(origins_str in line_text.lower()
                                    for origins_str in self.origins_strs):
@@ -133,7 +135,8 @@ class PDFParser:
                     if first_element_flag:
                         lower_side = page.bbox[3] - tables[table_num].bbox[3]
                         upper_side = element.y1
-                        table = self._extract_table(pdf_path, page_num, table_num)
+                        table = self._extract_table(
+                            pdf_path, page_num, table_num)
                         table_string = self._table_converter(table)
                         text_from_tables.append(table_string)
                         page_content.append(table_string)
@@ -184,7 +187,8 @@ class PDFParser:
         :return: table object
         """
 
-        return pdfplumber.open(pdf_path).pages[page_num].extract_tables()[table_num]
+        return pdfplumber.open(pdf_path).pages[page_num].extract_tables()[
+            table_num]
 
     @staticmethod
     def _table_converter(table):

@@ -64,14 +64,18 @@ class LLM():
                     device_map='auto',
                     trust_remote_code=True
                 ), self.adapter_name)
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.model_name, trust_remote_code=True)
         self.tokenizer.pad_token = self.tokenizer.eos_token
         self.tokenizer.padding_side = "right"
         self.generation_config = GenerationConfig.from_pretrained(
             self.model_name, max_new_tokens=1000)
 
     def generate(self, prompt):
-        data = self.tokenizer(prompt, return_tensors="pt", add_special_tokens=False)
+        data = self.tokenizer(
+            prompt,
+            return_tensors="pt",
+            add_special_tokens=False)
         data = {k: v.to(self.model.device) for k, v in data.items()}
         output_ids = self.model.generate(
             **data,

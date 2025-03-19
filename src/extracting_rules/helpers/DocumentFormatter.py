@@ -46,7 +46,11 @@ class DocumentFormatter:
 
         for key, value in json2.items():
             key = key.lower()
-            if key in merged and isinstance(merged[key], dict) and isinstance(value, dict):
+            if key in merged and isinstance(
+                    merged[key],
+                    dict) and isinstance(
+                    value,
+                    dict):
                 merged[key] = DocumentFormatter.merge_json(merged[key], value)
             else:
                 merged[key] = value

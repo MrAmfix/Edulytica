@@ -72,15 +72,19 @@ def set_model_id(sender, instance, **kwargs):
                                       7. Заметь, что в тексте написаны цель и задачи. Тебе нужно найти цель и задачи, затем прочитать и проанализировать весь текст и, после этого, сравнить текст на соответствие цели и задачам, которые присутствуют в тексте.\
                                       8. Важно! Не допускай повторений. Каждое из требований ты должен выполнить один раз. Например, не делай больше 1 раза численную оценку в процентах, это нужно сделать только 1 раз в конце отчета. Тоже самое и с другими пунктами, повторений быть не должно! Твой ответ должен быть последовательным и структурированным, а также логически выстроенным.'''
 
-    purpose_llm = LLM('IlyaGusev/saiga_llama3_8b', 'slavamarcin/saiga_llama3_8b-qdora-4bit_purpose')
-    summarize_llm = LLM('IlyaGusev/saiga_llama3_8b', 'slavamarcin/saiga3_8b_Qdora_4bit_sum')
+    purpose_llm = LLM('IlyaGusev/saiga_llama3_8b',
+                      'slavamarcin/saiga_llama3_8b-qdora-4bit_purpose')
+    summarize_llm = LLM(
+        'IlyaGusev/saiga_llama3_8b',
+        'slavamarcin/saiga3_8b_Qdora_4bit_sum')
     ROOT_DIR = Path(__file__).resolve().parents[1]
 
 
 def chunk_text(text, chunk_size, overlap):
     if chunk_size <= 0 or overlap < 0 or overlap >= chunk_size:
-        raise ValueError("Некорректные параметры: размер чанка должен быть положительным числом, "
-                         "нахлёст должен быть неотрицательным числом и меньше размера чанка.")
+        raise ValueError(
+            "Некорректные параметры: размер чанка должен быть положительным числом, "
+            "нахлёст должен быть неотрицательным числом и меньше размера чанка.")
 
     chunks = []
     start = 0
@@ -122,9 +126,10 @@ def get_llm_purpose_result(self, intro, main_text, user_id, ticket_id):
         PROMPT_TEMPLATE = "Текст работы:\n{all_text}\n\nЦели работы:\n{goals}\n\n"
         combined_text = PROMPT_TEMPLATE.format(all_text=all_text, goals=goals)
         chunks = chunk_text(combined_text, 12000, 0)
-        purpose_conversation = Conversation(message_template=DEFAULT_MESSAGE_TEMPLATE,
-                                            response_template=DEFAULT_RESPONSE_TEMPLATE,
-                                            system_prompt=PURPOSE_DEFAULT_SYSTEM_PROMPT)
+        purpose_conversation = Conversation(
+            message_template=DEFAULT_MESSAGE_TEMPLATE,
+            response_template=DEFAULT_RESPONSE_TEMPLATE,
+            system_prompt=PURPOSE_DEFAULT_SYSTEM_PROMPT)
         for i, chunk in enumerate(chunks):
             if i == len(chunks) - 1:
                 purpose_conversation.add_user_message(chunk)
@@ -133,9 +138,10 @@ def get_llm_purpose_result(self, intro, main_text, user_id, ticket_id):
         return out
 
     try:
-        extract_conversation = Conversation(message_template=DEFAULT_MESSAGE_TEMPLATE,
-                                            response_template=DEFAULT_RESPONSE_TEMPLATE,
-                                            system_prompt=EXTRACT_DEFAULT_SYSTEM_PROMPT)
+        extract_conversation = Conversation(
+            message_template=DEFAULT_MESSAGE_TEMPLATE,
+            response_template=DEFAULT_RESPONSE_TEMPLATE,
+            system_prompt=EXTRACT_DEFAULT_SYSTEM_PROMPT)
         extract_conversation.add_user_message(intro)
         prompt = extract_conversation.get_prompt(purpose_llm.tokenizer)
         goals = purpose_llm.generate(prompt)
@@ -144,9 +150,22 @@ def get_llm_purpose_result(self, intro, main_text, user_id, ticket_id):
         result = {'goal': goals, 'result': result_data}
         file_id = uuid.uuid4()
         current_date = datetime.date.today().isoformat()
-        os.makedirs(os.path.join(ROOT_DIR, 'results_file', current_date), exist_ok=True)
-        file_path = os.path.join(ROOT_DIR, 'results_file', current_date, str(file_id) + '.json')
-        file_path_bd = os.path.join('results_file', current_date, str(file_id) + '.json')
+        os.makedirs(
+            os.path.join(
+                ROOT_DIR,
+                'results_file',
+                current_date),
+            exist_ok=True)
+        file_path = os.path.join(
+            ROOT_DIR,
+            'results_file',
+            current_date,
+            str(file_id) +
+            '.json')
+        file_path_bd = os.path.join(
+            'results_file',
+            current_date,
+            str(file_id) + '.json')
         with open(file_path, 'w+', encoding='utf-8') as file:
             json.dump(result, file)
         ResultFilesCrud.create(
@@ -154,10 +173,16 @@ def get_llm_purpose_result(self, intro, main_text, user_id, ticket_id):
             file=file_path_bd,
             user_id=user_id,
             ticket_id=ticket_id)
-        TicketsCrud.update(session=self.session, record_id=ticket_id, status_id=1)
+        TicketsCrud.update(
+            session=self.session,
+            record_id=ticket_id,
+            status_id=1)
         return {'result': 'ok', 'intro': intro}
     except Exception as e:
-        TicketsCrud.update(session=self.session, record_id=ticket_id, status_id=2)
+        TicketsCrud.update(
+            session=self.session,
+            record_id=ticket_id,
+            status_id=2)
         raise e
 
 
@@ -167,9 +192,10 @@ def get_llm_summary_result(self, main_text, user_id, ticket_id):
         result_data = {}
         for i, inpt in enumerate(all_text):
             print(inpt)
-            summarize_conversation = Conversation(message_template=DEFAULT_MESSAGE_TEMPLATE,
-                                                  response_template=DEFAULT_RESPONSE_TEMPLATE,
-                                                  system_prompt=SUMMARIZE_DEFAULT_SYSTEM_PROMPT)
+            summarize_conversation = Conversation(
+                message_template=DEFAULT_MESSAGE_TEMPLATE,
+                response_template=DEFAULT_RESPONSE_TEMPLATE,
+                system_prompt=SUMMARIZE_DEFAULT_SYSTEM_PROMPT)
             summarize_conversation.add_user_message(inpt)
             prompt = summarize_conversation.get_prompt(summarize_llm.tokenizer)
             output = summarize_llm.generate(prompt)
@@ -180,9 +206,22 @@ def get_llm_summary_result(self, main_text, user_id, ticket_id):
         result_data = prepare_answer(main_text)
         file_id = uuid.uuid4()
         current_date = datetime.date.today().isoformat()
-        os.makedirs(os.path.join(ROOT_DIR, 'results_file', current_date), exist_ok=True)
-        file_path = os.path.join(ROOT_DIR, 'results_file', current_date, str(file_id) + '.json')
-        file_path_bd = os.path.join('results_file', current_date, str(file_id) + '.json')
+        os.makedirs(
+            os.path.join(
+                ROOT_DIR,
+                'results_file',
+                current_date),
+            exist_ok=True)
+        file_path = os.path.join(
+            ROOT_DIR,
+            'results_file',
+            current_date,
+            str(file_id) +
+            '.json')
+        file_path_bd = os.path.join(
+            'results_file',
+            current_date,
+            str(file_id) + '.json')
         result = {'result': result_data}
         with open(file_path, 'w+', encoding='utf-8') as file:
             json.dump(result, file)
@@ -191,8 +230,14 @@ def get_llm_summary_result(self, main_text, user_id, ticket_id):
             file=file_path_bd,
             user_id=user_id,
             ticket_id=ticket_id)
-        TicketsCrud.update(session=self.session, record_id=ticket_id, status_id=1)
+        TicketsCrud.update(
+            session=self.session,
+            record_id=ticket_id,
+            status_id=1)
         return {'result': 'ok'}
     except BaseException:
-        TicketsCrud.update(session=self.session, record_id=ticket_id, status_id=2)
+        TicketsCrud.update(
+            session=self.session,
+            record_id=ticket_id,
+            status_id=2)
         return {'result': 'error'}
