@@ -18,7 +18,9 @@ jobs:
           EXCLUDE_PATTERN=$(grep -v '^\s*#' .pep8ignore | sed '/^\s*$/d' | sed 's/\//\\\//g; s/_/\\_/g; s/\./\\./g' | paste -sd, -)
           echo "EXCLUDE_PATTERN=$EXCLUDE_PATTERN" >> $GITHUB_ENV
           echo "Exclude pattern generated: $EXCLUDE_PATTERN"
-          echo "Env variable EXCLUDE: ${{ env.EXCLUDE_PATTERN }}"
+      - name: Print generated exclude pattern from env
+        run:
+          echo "${{ env.EXCLUDE_PATTERN }}"
       - name: autopep8
         id: autopep8
         uses: peter-evans/autopep8@v2
