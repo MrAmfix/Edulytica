@@ -20,12 +20,12 @@ jobs:
           echo -e "Exclude pattern generated: $EXCLUDE_PATTERN"
       - name: Print generated exclude pattern from env
         run:
-          echo "${{ env.EXCLUDE_PATTERN }}"
+          echo -e "${{ env.EXCLUDE_PATTERN }}"
       - name: autopep8
         id: autopep8
         uses: peter-evans/autopep8@v2
         with:
-          args: --exit-code --recursive --in-place --aggressive --aggressive --exclude "${{ env.EXCLUDE_PATTERN }}" .
+          args: --exit-code --recursive --in-place --aggressive --aggressive --exclude=${{ env.EXCLUDE_PATTERN }} .
       - name: Commit autopep8 changes
         id: cap8c
         if: steps.autopep8.outputs.exit-code == 2
