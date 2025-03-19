@@ -23,8 +23,7 @@ class TestParserVKR(unittest.TestCase):
 
         # Проверка вызова requests.get
         self.assertTrue(mock_requests_get.called)
-        # 1 раз для каждой персоны + 1 раз для файла
-        self.assertEqual(mock_requests_get.call_count, 4)
+        self.assertEqual(mock_requests_get.call_count, 4)  # 1 раз для каждой персоны + 1 раз для файла
 
     @patch('Edulytica.src.data_handling.VKRParser.requests.get')
     @patch('Edulytica.src.data_handling.VKRParser.open', new_callable=mock_open, read_data='790')
