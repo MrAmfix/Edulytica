@@ -7,16 +7,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install autopep8
-        run: pip install autopep8
-      - name: Run autopep8 with dynamic exclude pattern
-        id: autopep8
+      - name: Generate autopep8 exclude pattern
+        id: generate_exclude
         run: |
-          # Формируем строку с исключениями, экранируя символы для передачи в autopep8
-          EXCLUDE_PATTERN=$(cat .pep8ignore | sed 's/\r//' | sed 's/\//\\\//g' | sed 's/\./\\./g' | tr '\n' ',' | sed 's/,$//')
-          echo "Excluding pattern: $EXCLUDE_PATTERN"
-          autopep8 . --exit-code --recursive --in-place --aggressive --aggressive --exclude "$EXCLUDE_PATTERN"
-        continue-on-error: true
+          EXCLUDE_PATTERN=$(grep -v '^\s*#' .pep8ignore | sed '/^\s*$/d' | paste -sd, -)
+          echo "EXCLUDE_PATTERN=$EXCLUDE_PATTERN" >> $GITHUB_ENV
+          echo "Exclude pattern generated: $EXCLUDE_PATTERN"
+      - name: autopep8
+        id: autopep8
+        uses: peter-evans/autopep8@v2
+        with:
+          args: --exit-code --recursive --in-place --aggressive --aggressive --exclude "${{ env.EXCLUDE_PATTERN }}" .
       - name: Find Comment
         uses: peter-evans/find-comment@v2
         id: fc
