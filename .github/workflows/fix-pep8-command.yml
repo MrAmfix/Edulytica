@@ -20,7 +20,7 @@ jobs:
           EXCLUDE_PATTERN=$(cat .pep8ignore | sed 's/\r//' | sed 's/\//\\\//g' | sed 's/\./\\./g' | tr '\n' ',' | sed 's/,$//')
           echo "Excluding pattern: $EXCLUDE_PATTERN"
           autopep8 . --exit-code --recursive --in-place --aggressive --aggressive --exclude "$EXCLUDE_PATTERN"
-
+        continue-on-error: true
       - name: Commit autopep8 changes
         id: cap8c
         if: steps.autopep8.outputs.exit-code == 2
