@@ -25,13 +25,21 @@ def upgrade() -> None:
                     sa.Column('status', sa.String(), nullable=True),
                     sa.PrimaryKeyConstraint('id')
                     )
-    op.create_index(op.f('ix_file_statuses_id'), 'file_statuses', ['id'], unique=False)
+    op.create_index(
+        op.f('ix_file_statuses_id'),
+        'file_statuses',
+        ['id'],
+        unique=False)
     op.create_table('ticket_statuses',
                     sa.Column('id', sa.Integer(), nullable=False),
                     sa.Column('status', sa.String(), nullable=True),
                     sa.PrimaryKeyConstraint('id')
                     )
-    op.create_index(op.f('ix_ticket_statuses_id'), 'ticket_statuses', ['id'], unique=False)
+    op.create_index(
+        op.f('ix_ticket_statuses_id'),
+        'ticket_statuses',
+        ['id'],
+        unique=False)
     op.create_table('tokens',
                     sa.Column('id', sa.UUID(), nullable=False),
                     sa.Column('user_id', sa.UUID(), nullable=False),
@@ -82,7 +90,11 @@ def upgrade() -> None:
                     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
                     sa.PrimaryKeyConstraint('id')
                     )
-    op.create_index(op.f('ix_result_files_id'), 'result_files', ['id'], unique=False)
+    op.create_index(
+        op.f('ix_result_files_id'),
+        'result_files',
+        ['id'],
+        unique=False)
     # ### end Alembic commands ###
 
 

@@ -11,9 +11,21 @@ class TestTextComparator(unittest.TestCase):
 
     def test_correct_input_types(self):
         text_comparator = TextComparator
-        self.assertRaises(TypeError, text_comparator.count_percent_of_transformed_words, 1, 1)
-        self.assertRaises(TypeError, text_comparator.count_percent_of_transformed_words, 1, 'hello')
-        self.assertRaises(TypeError, text_comparator.count_percent_of_transformed_words, 'hello', 1)
+        self.assertRaises(
+            TypeError,
+            text_comparator.count_percent_of_transformed_words,
+            1,
+            1)
+        self.assertRaises(
+            TypeError,
+            text_comparator.count_percent_of_transformed_words,
+            1,
+            'hello')
+        self.assertRaises(
+            TypeError,
+            text_comparator.count_percent_of_transformed_words,
+            'hello',
+            1)
         self.assertRaises(
             TypeError,
             text_comparator.count_percent_of_transformed_words,
@@ -75,9 +87,10 @@ class TestTextComparator(unittest.TestCase):
             'This man is simply beaming with happiness!',
             'This man is just unbearably happy about it!'),
             60.00)
-        self.assertEqual(text_comparator.count_percent_of_transformed_words(
-            'Yesterday I went to the store and bought a new PS4 game there!',
-            'Yesterday I went to the store and bought delicious ice cream there!'),
+        self.assertEqual(
+            text_comparator.count_percent_of_transformed_words(
+                'Yesterday I went to the store and bought a new PS4 game there!',
+                'Yesterday I went to the store and bought delicious ice cream there!'),
             28.00)
         self.assertEqual(text_comparator.count_percent_of_transformed_words(
             'Yesterday I went to the store and bought a new PS4 game there!',

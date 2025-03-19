@@ -24,7 +24,8 @@ class LanguageModelClient:
         :param temperature: The temperature setting to control the randomness of the response.
         :return: The response from the OpenAI API.
         """
-        # Assuming that `completion` is a function that sends requests to the OpenAI API
+        # Assuming that `completion` is a function that sends requests to the
+        # OpenAI API
         response = completion(
             model=model,
             messages=[{"content": prompt, "role": "user"}],

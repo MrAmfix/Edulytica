@@ -55,7 +55,8 @@ def _sub_api_logs(handler):
 
     @wraps(handler)
     async def wrapper(*args, **kwargs):
-        bound_arguments = inspect.signature(handler).bind(*args, **kwargs).arguments
+        bound_arguments = inspect.signature(
+            handler).bind(*args, **kwargs).arguments
         params = {
             key: value for key,
             value in bound_arguments.items() if key not in (
