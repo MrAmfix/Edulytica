@@ -149,7 +149,11 @@ def get_llm_purpose_result(self, intro, main_text, user_id, ticket_id):
         file_path_bd = os.path.join('results_file', current_date, str(file_id) + '.json')
         with open(file_path, 'w+', encoding='utf-8') as file:
             json.dump(result, file)
-        ResultFilesCrud.create(session=self.session, file=file_path_bd, user_id=user_id, ticket_id=ticket_id)
+        ResultFilesCrud.create(
+            session=self.session,
+            file=file_path_bd,
+            user_id=user_id,
+            ticket_id=ticket_id)
         TicketsCrud.update(session=self.session, record_id=ticket_id, status_id=1)
         return {'result': 'ok', 'intro': intro}
     except Exception as e:
@@ -182,7 +186,11 @@ def get_llm_summary_result(self, main_text, user_id, ticket_id):
         result = {'result': result_data}
         with open(file_path, 'w+', encoding='utf-8') as file:
             json.dump(result, file)
-        ResultFilesCrud.create(session=self.session, file=file_path_bd, user_id=user_id, ticket_id=ticket_id)
+        ResultFilesCrud.create(
+            session=self.session,
+            file=file_path_bd,
+            user_id=user_id,
+            ticket_id=ticket_id)
         TicketsCrud.update(session=self.session, record_id=ticket_id, status_id=1)
         return {'result': 'ok'}
     except BaseException:

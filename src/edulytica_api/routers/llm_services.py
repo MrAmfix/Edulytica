@@ -34,7 +34,11 @@ async def get_purpose(
     ticket = await TicketsCrud.create(
         session=session, ticket_type='Достижимость', user_id=user.id, status_id=0
     )
-    task = get_llm_purpose_result.delay(intro=intro, main_text=main_text, user_id=user.id, ticket_id=ticket.id)
+    task = get_llm_purpose_result.delay(
+        intro=intro,
+        main_text=main_text,
+        user_id=user.id,
+        ticket_id=ticket.id)
     return json.dumps(task.id)
 
 

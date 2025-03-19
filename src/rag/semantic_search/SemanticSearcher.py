@@ -53,6 +53,7 @@ class SemanticSearcher:
         query_embedding = self.openai_embeddings.embed_documents([query_text])[0]
         distances, indices = self.nn.kneighbors([query_embedding])
         if return_distance:
-            return [{'text': self.texts[idx], 'distance': dist} for idx, dist in zip(indices[0], distances[0])]
+            return [{'text': self.texts[idx], 'distance': dist}
+                    for idx, dist in zip(indices[0], distances[0])]
         else:
             return [self.texts[idx] for idx in indices[0]]
