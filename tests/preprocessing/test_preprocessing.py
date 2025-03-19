@@ -33,8 +33,7 @@ class TestTextProcessingUtils(unittest.TestCase):
         text = "This is a sample text. " * 10
         chunk_size = 50
         chunk_overlap = 10
-        chunks = TextProcessingUtils.text_to_chunks(
-            text, chunk_size, chunk_overlap)
+        chunks = TextProcessingUtils.text_to_chunks(text, chunk_size, chunk_overlap)
 
         self.assertGreater(len(chunks), 0)
 
@@ -51,8 +50,7 @@ class TestTextProcessingUtils(unittest.TestCase):
     def test_text_to_chunks_raises_value_error_for_negative_chunk_overlap(self):
         text = "This is a test text."
         with self.assertRaises(ValueError):
-            TextProcessingUtils.text_to_chunks(
-                text, chunk_size=512, chunk_overlap=-1)
+            TextProcessingUtils.text_to_chunks(text, chunk_size=512, chunk_overlap=-1)
 
 
 if __name__ == '__main__':

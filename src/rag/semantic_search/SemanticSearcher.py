@@ -38,12 +38,7 @@ class SemanticSearcher:
         self.texts = texts
         self.fitted = True
 
-    def search(self,
-               query_text: str,
-               return_distance: bool = True) -> Union[List[Dict[str,
-                                                                Union[str,
-                                                                      float]]],
-                                                      List[str]]:
+    def search(self, query_text: str, return_distance: bool = True) -> Union[List[Dict[str, Union[str, float]]], List[str]]:
         """
         Searches for semantically similar chunks of text based on a query string.
 
@@ -54,11 +49,9 @@ class SemanticSearcher:
         """
         if not self.fitted:
             raise ValueError("Cannot search before fit is called.")
-        query_embedding = self.openai_embeddings.embed_documents([query_text])[
-            0]
+        query_embedding = self.openai_embeddings.embed_documents([query_text])[0]
         distances, indices = self.nn.kneighbors([query_embedding])
         if return_distance:
-            return [{'text': self.texts[idx], 'distance': dist}
-                    for idx, dist in zip(indices[0], distances[0])]
+            return [{'text': self.texts[idx], 'distance': dist} for idx, dist in zip(indices[0], distances[0])]
         else:
             return [self.texts[idx] for idx in indices[0]]

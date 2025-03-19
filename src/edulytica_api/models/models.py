@@ -35,34 +35,23 @@ class User(Base, AsyncAttrs):
     password = Column(String(100), nullable=False)
     disabled = Column(Boolean, nullable=False, default=False)
 
-    result_files: Mapped[List["ResultFiles"]
-                         ] = relationship(back_populates="user")
+    result_files: Mapped[List["ResultFiles"]] = relationship(back_populates="user")
     ticket: Mapped[List["Tickets"]] = relationship(back_populates="user")
 
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=datetime_now_moscow)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(
-            timezone=True),
-        default=datetime_now_moscow,
-        onupdate=datetime_now_moscow)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime_now_moscow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime_now_moscow,
+                                                 onupdate=datetime_now_moscow)
 
 
 class Token(Base, AsyncAttrs):
     __tablename__ = "tokens"
-    id = Column(
-        UUID(
-            as_uuid=True),
-        primary_key=True,
-        nullable=False,
-        default=uuid.uuid4)
+    id = Column(UUID(as_uuid=True), primary_key=True, nullable=False, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), nullable=False)
     refresh_token = Column(String(450), nullable=False)
     checker = Column(UUID, nullable=False)
     status = Column(Boolean)
 
-    created_date: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=datetime_now_moscow)
+    created_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime_now_moscow)
 
 
 class FileStatus(Base, AsyncAttrs):
@@ -99,8 +88,7 @@ class Tickets(Base, AsyncAttrs):
                 default=uuid.uuid4, index=True)
     ticket_type = Column(String)
     created_date = Column(DateTime(timezone=True), default=datetime_now_moscow)
-    result_files: Mapped[List["ResultFiles"]
-                         ] = relationship(back_populates="ticket")
+    result_files: Mapped[List["ResultFiles"]] = relationship(back_populates="ticket")
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
     user: Mapped["User"] = relationship(back_populates="ticket")
     status_id: Mapped[Integer] = mapped_column(ForeignKey("ticket_statuses.id"))

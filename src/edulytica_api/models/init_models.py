@@ -25,12 +25,7 @@ class User(Base, AsyncAttrs):
 
 class Token(Base, AsyncAttrs):
     __tablename__ = "tokens"
-    id = Column(
-        UUID(
-            as_uuid=True),
-        primary_key=True,
-        nullable=False,
-        default=uuid.uuid4)
+    id = Column(UUID(as_uuid=True), primary_key=True, nullable=False, default=uuid.uuid4)
     refresh_token = Column(String(450), nullable=False)
     checker = Column(UUID, nullable=False)
     status = Column(Boolean)

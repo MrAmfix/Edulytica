@@ -6,7 +6,6 @@ import json
 
 load_dotenv('config/formatter.env')
 
-
 class DocumentFormatter:
     """
     An auxiliary class containing methods for formatting json objects and splitting documents into chunks
@@ -17,14 +16,14 @@ class DocumentFormatter:
         """ split documents by chunks """
         loader = TextLoader(doc, encoding='utf-8')
         documents = loader.load()
-
+        
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=int(getenv('CHUNK_SIZE')),
-            chunk_overlap=int(getenv('CHUNK_OVERLAP')),
-            length_function=len,
-            is_separator_regex=False,
+            chunk_size = int(getenv('CHUNK_SIZE')),
+            chunk_overlap = int(getenv('CHUNK_OVERLAP')),
+            length_function = len,
+            is_separator_regex = False,
         )
-
+        
         documents = text_splitter.split_documents(documents)
 
         return documents
@@ -46,11 +45,7 @@ class DocumentFormatter:
 
         for key, value in json2.items():
             key = key.lower()
-            if key in merged and isinstance(
-                    merged[key],
-                    dict) and isinstance(
-                    value,
-                    dict):
+            if key in merged and isinstance(merged[key], dict) and isinstance(value, dict):
                 merged[key] = DocumentFormatter.merge_json(merged[key], value)
             else:
                 merged[key] = value

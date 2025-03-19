@@ -71,8 +71,7 @@ def encode_jwt(
     """
     to_encode = payload.copy()
     now = datetime.utcnow()
-    expires = now + \
-        (expires_delta if expires_delta else timedelta(minutes=expires_minutes))
+    expires = now + (expires_delta if expires_delta else timedelta(minutes=expires_minutes))
     to_encode.update(exp=expires, iat=now)
     return jwt.encode(to_encode, private_key, algorithm=algorithm)
 
@@ -98,16 +97,11 @@ def create_jwt(
     """
     jwt_payload = {TOKEN_TYPE_FIELD: token_type}
     jwt_payload.update(token_data)
-    return encode_jwt(
-        payload=jwt_payload,
-        private_key=jwt_secret,
-        algorithm=ALGORITHM,
-        expires_minutes=expires_minutes,
-        expires_delta=expires_delta)
+    return encode_jwt(payload=jwt_payload, private_key=jwt_secret, algorithm=ALGORITHM,
+                      expires_minutes=expires_minutes, expires_delta=expires_delta)
 
 
-def create_access_token(
-        subject: Union[str, Any], expires_delta: Optional[timedelta] = None) -> str:
+def create_access_token(subject: Union[str, Any], expires_delta: Optional[timedelta] = None) -> str:
     """
     Creates an access token for a given subject.
 
@@ -118,13 +112,8 @@ def create_access_token(
     Returns:
         str: Encoded access token.
     """
-    return create_jwt(
-        token_data={
-            "sub": str(subject)},
-        token_type=ACCESS_TOKEN_TYPE,
-        jwt_secret=JWT_SECRET_KEY,
-        expires_delta=expires_delta,
-        expires_minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    return create_jwt(token_data={"sub": str(subject)}, token_type=ACCESS_TOKEN_TYPE, jwt_secret=JWT_SECRET_KEY,
+                      expires_delta=expires_delta, expires_minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
 
 def create_refresh_token(subject: Union[str, Any], checker: Union[str, Any],
@@ -140,14 +129,9 @@ def create_refresh_token(subject: Union[str, Any], checker: Union[str, Any],
     Returns:
         str: Encoded refresh token.
     """
-    return create_jwt(
-        token_data={
-            "sub": str(subject),
-            'checker': str(checker)},
-        token_type=REFRESH_TOKEN_TYPE,
-        jwt_secret=JWT_REFRESH_SECRET_KEY,
-        expires_delta=expires_delta,
-        expires_minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
+    return create_jwt(token_data={"sub": str(subject), 'checker': str(checker)}, token_type=REFRESH_TOKEN_TYPE,
+                      jwt_secret=JWT_REFRESH_SECRET_KEY, expires_delta=expires_delta,
+                      expires_minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
 
 
 def get_expiry(token_exp: int) -> str:

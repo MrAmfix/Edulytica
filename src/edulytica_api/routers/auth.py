@@ -29,9 +29,7 @@ async def login(
 ):
     user = await UserCrud.get_filtered_by_params(session=session, username=form_data.username)
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Incorrect email or password")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect email or password")
 
     user = user[0]
     password_validate(form_data.password, user.password)
@@ -48,9 +46,7 @@ async def login(
         httponly=True,
         expires=get_expiry(REFRESH_TOKEN_EXPIRE_MINUTES)
     )
-    return auth_schemas.TokenData(
-        access_token=access_token,
-        refresh_token=refresh_token)
+    return auth_schemas.TokenData(access_token=access_token, refresh_token=refresh_token)
 
 
 @api_logs(auth_router.post("/register"))
@@ -79,9 +75,7 @@ async def change_password(
 ):
     user = auth_data['user']
     if not verify_password(request.old_password, user.password):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid old password")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid old password")
 
     encrypted_password = get_hashed_password(request.new_password)
     user.password = encrypted_password
@@ -108,9 +102,7 @@ async def refresh_token(
         refresh_token=token
     )
     if len(tokens) != 1:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Exception in token validation")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Exception in token validation")
 
     token = tokens[0]
     access_token = create_access_token(user.id)
@@ -131,9 +123,7 @@ async def refresh_token(
         httponly=True,
         expires=get_expiry(REFRESH_TOKEN_EXPIRE_MINUTES)
     )
-    return auth_schemas.TokenData(
-        access_token=access_token,
-        refresh_token=refresh_token)
+    return auth_schemas.TokenData(access_token=access_token, refresh_token=refresh_token)
 
 
 @api_logs(auth_router.get('/logout'))
@@ -153,9 +143,7 @@ async def logout(
         refresh_token=token
     )
     if len(tokens) != 1:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Exception in token validation")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Exception in token validation")
 
     token = tokens[0]
     await TokenCrud.delete(session=session, record_id=token.id)

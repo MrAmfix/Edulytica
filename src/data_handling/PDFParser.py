@@ -22,11 +22,7 @@ class PDFParser:
         self.encoding = 'utf-8'
         self.file_format = '.pdf'
 
-    def parse_files(
-            self,
-            pdfs_directory: str = '.',
-            csv_filename: str = None,
-            clear_csv: bool = False):
+    def parse_files(self, pdfs_directory: str = '.', csv_filename: str = None, clear_csv: bool = False):
         """Parse all pdfs in directory and save to csv file
 
         :param pdfs_directory: directory where pdfs located
@@ -47,21 +43,18 @@ class PDFParser:
             except FileNotFoundError:
                 pdfs = {}
 
-            pdf_filenames = sorted(
-                filter(lambda x: x[-4:] == self.file_format, os.listdir(pdfs_directory)))
+            pdf_filenames = sorted(filter(lambda x: x[-4:] == self.file_format, os.listdir(pdfs_directory)))
             for i, pdf_filename in enumerate(pdf_filenames):
                 print(i, pdf_filename, end=' ')
                 if pdf_filename[:-4] in pdfs:
                     if pdfs.get(pdf_filename[:-4]):
                         print('skipped')
                     else:
-                        pdfs[pdf_filename[:- 4]
-                             ] = self.parse_file(f'{pdfs_directory}/{pdf_filename}')
+                        pdfs[pdf_filename[:-4]] = self.parse_file(f'{pdfs_directory}/{pdf_filename}')
                         print('replaced')
                 else:
                     try:
-                        pdfs[pdf_filename[:- 4]
-                             ] = self.parse_file(f'{pdfs_directory}/{pdf_filename}')
+                        pdfs[pdf_filename[:-4]] = self.parse_file(f'{pdfs_directory}/{pdf_filename}')
                         print('done')
                     except pdfminer.pdfparser.PDFSyntaxError:
                         print('pdf can not be opened')
@@ -106,18 +99,13 @@ class PDFParser:
             for i in range(min(2, len(page_elements))):
                 first_element = page_elements[i][1]
                 if isinstance(first_element, LTTextContainer):
-                    line_text, format_for_line = self._extract_text(
-                        first_element)
+                    line_text, format_for_line = self._extract_text(first_element)
                     for form in format_for_line:
                         if isinstance(form, str) and 'bold' in form.lower():
-                            if any(intro_str in line_text.lower()
-                                   for intro_str in self.intro_strs):
+                            if any(intro_str in line_text.lower() for intro_str in self.intro_strs):
                                 has_intro = True
-                            if any(origins_str in line_text.lower()
-                                   for origins_str in self.origins_strs):
-                                return ''.join(
-                                    row for page in pages for row in page).replace(
-                                    '\0', '')
+                            if any(origins_str in line_text.lower() for origins_str in self.origins_strs):
+                                return ''.join(row for page in pages for row in page).replace('\0', '')
                 if page_num >= 10:
                     return 'none'
             if not has_intro:
@@ -135,8 +123,7 @@ class PDFParser:
                     if first_element_flag:
                         lower_side = page.bbox[3] - tables[table_num].bbox[3]
                         upper_side = element.y1
-                        table = self._extract_table(
-                            pdf_path, page_num, table_num)
+                        table = self._extract_table(pdf_path, page_num, table_num)
                         table_string = self._table_converter(table)
                         text_from_tables.append(table_string)
                         page_content.append(table_string)
@@ -187,8 +174,7 @@ class PDFParser:
         :return: table object
         """
 
-        return pdfplumber.open(pdf_path).pages[page_num].extract_tables()[
-            table_num]
+        return pdfplumber.open(pdf_path).pages[page_num].extract_tables()[table_num]
 
     @staticmethod
     def _table_converter(table):
@@ -203,9 +189,8 @@ class PDFParser:
         for row_num in range(len(table)):
             row = table[row_num]
             cleansed_row = [
-                item.replace(
-                    '\n',
-                    '') if item is not None and '\n' in item else 'None' if item is None else item for item in row]
+                item.replace('\n', '') if item is not None and '\n' in item else 'None' if item is None else item for
+                item in row]
             table_string += f" {' '.join(cleansed_row)} \n"
         return table_string[:-1]
 

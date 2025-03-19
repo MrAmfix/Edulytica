@@ -53,13 +53,11 @@ class Parser:
         check = False
         text = []
         for p in root.iter(f"{{{schemas.w}}}p"):
-            if p.findall(
-                    f'{{{schemas.w}}}bookmarkStart[@{{{schemas.w}}}name="{next_anchor_id}"]') and check:
+            if p.findall(f'{{{schemas.w}}}bookmarkStart[@{{{schemas.w}}}name="{next_anchor_id}"]') and check:
                 return text if list_view else '\n'.join(text)
             if check:
                 text.append(self._parse_text_from_anchor(p))
-            if p.findall(
-                    f'{{{schemas.w}}}bookmarkStart[@{{{schemas.w}}}name="{anchor_id}"]'):
+            if p.findall(f'{{{schemas.w}}}bookmarkStart[@{{{schemas.w}}}name="{anchor_id}"]'):
                 check = True
         return text if list_view else '\n'.join(text)
 
@@ -81,40 +79,33 @@ class Parser:
                         continue
                     elif int(val) // 10 == 1:
                         for text in para.iter(f'{{{schemas.w}}}t'):
-                            struct.append(
-                                Elem(str(len(struct) + 1), text.text, hyperlink_id))
+                            struct.append(Elem(str(len(struct) + 1), text.text, hyperlink_id))
                             break
                     elif int(val) // 10 == 2:
                         for text in para.iter(f'{{{schemas.w}}}t'):
                             if len(struct) == 0:
-                                struct.append(
-                                    Elem(str(len(struct) + 1), text.text, hyperlink_id))
+                                struct.append(Elem(str(len(struct) + 1), text.text, hyperlink_id))
                                 potentially_damage = True
                                 break
                             else:
                                 num = f'{str(len(struct))}.{str(len(struct[-1]) + 1)}'
-                                struct[-1].append(Elem(num,
-                                                  text.text, hyperlink_id))
+                                struct[-1].append(Elem(num, text.text, hyperlink_id))
                                 break
                     elif int(val) // 10 == 3:
                         for text in para.iter(f'{{{schemas.w}}}t'):
                             if len(struct) == 0:
                                 potentially_damage = True
-                                struct.append(
-                                    Elem(str(len(struct) + 1), text.text, hyperlink_id))
+                                struct.append(Elem(str(len(struct) + 1), text.text, hyperlink_id))
                                 break
                             elif len(struct[-1]) == 0:
                                 potentially_damage = True
                                 num = f'{str(len(struct))}.{str(len(struct[-1]) + 1)}'
-                                struct[-1].append(Elem(num,
-                                                  text.text, hyperlink_id))
+                                struct[-1].append(Elem(num, text.text, hyperlink_id))
                                 break
                             else:
-                                num = (
-                                    f'{str(len(struct))}.{str(len(struct[-1]))}.'
-                                    f'{str(len(struct[-1].sub_elements) + 1)}')
-                                struct[-1].sub_elements[-1].append(
-                                    Elem(num, text.text, hyperlink_id))
+                                num = (f'{str(len(struct))}.{str(len(struct[-1]))}.'
+                                       f'{str(len(struct[-1].sub_elements) + 1)}')
+                                struct[-1].sub_elements[-1].append(Elem(num, text.text, hyperlink_id))
                                 break
         return struct, potentially_damage
 
@@ -166,15 +157,13 @@ def get_structural_paragraphs(file):
             elem_dict = {
                 "num": elem.num,
                 "title": elem.text,
-                'text': p.parse_paragraphs_from_anchor(
-                    elem.anchor_id,
-                    next_anchor_id)}
+                'text': p.parse_paragraphs_from_anchor(elem.anchor_id, next_anchor_id)
+            }
             temp = []
             if elem.sub_elements:
                 for i, sub_elem in enumerate(elem.sub_elements):
                     if i < len(elem.sub_elements) - 1:
-                        temp.append(convert_element_to_dict(
-                            sub_elem, p, elem.sub_elements[i + 1]))
+                        temp.append(convert_element_to_dict(sub_elem, p, elem.sub_elements[i + 1]))
                     else:
                         temp.append(convert_element_to_dict(sub_elem, p))
             elem_dict["sub_elements"] = temp
@@ -184,23 +173,21 @@ def get_structural_paragraphs(file):
             return
         temp = []
         for i, elem in enumerate(elements):
-            if i < len(elements) - 1:
-                temp.append(convert_element_to_dict(elem, p, elements[i + 1]))
+            if i<len(elements)-1:
+                temp.append(convert_element_to_dict(elem, p, elements[i+1]))
             else:
                 temp.append(convert_element_to_dict(elem, p))
         return temp
+
+
 
     try:
         import io
         with io.BytesIO(file.read()) as f:
             p = Parser(path=f)
             s, pot = p.parse()
-            n = {
-                'potentially_damage': pot,
-                'table_of_content': struct_to_dict(
-                    s,
-                    p),
-                'other_text': p.get_other_text()}
+            n = {'potentially_damage': pot, 'table_of_content': struct_to_dict(s, p),
+                 'other_text': p.get_other_text()}
             return n
     except Exception as _e:
         raise _e

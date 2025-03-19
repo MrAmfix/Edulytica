@@ -21,10 +21,7 @@ class TextProcessingUtils:
         text = re.sub(r'\s+\d+\s+', ' ', text)
 
         # Fix hyphens and join broken words
-        text = re.sub(
-            r'(\w+)-\s+(\w+)',
-            lambda match: f"{match.group(1)}{match.group(2)}",
-            text)
+        text = re.sub(r'(\w+)-\s+(\w+)', lambda match: f"{match.group(1)}{match.group(2)}", text)
 
         # Remove table-like data
         text = re.sub(r'\[\s*\w+\s*\|\s*\w+\s*\]', ' ', text)
@@ -75,3 +72,4 @@ class TextProcessingUtils:
                 chunks.append("")
 
         return chunks
+

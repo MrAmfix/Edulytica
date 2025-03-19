@@ -7,11 +7,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Get excluded directories
+        id: get_excludes
+        run: |
+          EXCLUDES=$(paste -sd, .pep8ignore)
+          echo "excludes=$EXCLUDES" >> $GITHUB_OUTPUT
       - name: autopep8
         id: autopep8
         uses: peter-evans/autopep8@v2
         with:
-          args: --exit-code --recursive --in-place --aggressive --aggressive .
+          args: --exit-code --recursive --in-place --aggressive --aggressive --exclude "${{ steps.get_excludes.outputs.excludes }}" .
       - name: Find Comment
         uses: peter-evans/find-comment@v2
         id: fc
