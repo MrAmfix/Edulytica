@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Generate and set EXCLUDE_PATTERN
         run: |
-          EXCLUDE_PATTERN=$(grep -v '^\s*#' .pep8ignore | sed 's/\r//' | sed '/^\s*$/d' | sed 's/\//\\\//g; s/_/\\_/g; s/\./\\./g' | paste -sd, -)
+          EXCLUDE_PATTERN=$(cat .pep8ignore | sed 's/\r//' | sed 's/\//\\\//g' | sed 's/\./\\./g' | tr '\n' '|' | sed 's/|$//')
           echo "EXCLUDE_PATTERN=$EXCLUDE_PATTERN" >> $GITHUB_ENV
           echo -e "Exclude pattern generated: $EXCLUDE_PATTERN"
       - name: Print generated exclude pattern from env
