@@ -68,7 +68,8 @@ class GigaModel:
         current_datetime = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
         with open(f'data/{current_datetime}.json', 'w', encoding='UTF-8') as file_json:
-            # Используем глубокое слияние для объединения всех JSON-ответов в один
+            # Используем глубокое слияние для объединения всех JSON-ответов в
+            # один
             merged_json = DocumentFormatter.deep_merge_json(responses)
             json.dump(merged_json, file_json, ensure_ascii=False)
 

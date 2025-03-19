@@ -12,14 +12,16 @@ class ParserVKR:
     This class is responsible for parsing VKR files
     """
 
-    def __init__(self, start_person_id: int = None, end_person_id: int = None) -> None:
+    def __init__(self, start_person_id: int = None,
+                 end_person_id: int = None) -> None:
         self.main_page_url = f'https://dspace.spbu.ru'
         self.persons_url = 'handle'
         self.person_main_id = 11701
         self.master_start_id = start_person_id or 790
         self.person_end_id = end_person_id or 45210
         try:
-            self.excluded_ids = set(map(int, open('excluded_ids.txt').readline().split()))
+            self.excluded_ids = set(
+                map(int, open('excluded_ids.txt').readline().split()))
         except FileNotFoundError:
             self.excluded_ids = set()
         self.BACHELOR_STUDIES = 'BACHELOR STUDIES'
@@ -42,7 +44,8 @@ class ParserVKR:
         """
 
         try:
-            start_person_id = max(self.master_start_id, int(open('last_person_id.txt', 'r').read()))
+            start_person_id = max(self.master_start_id, int(
+                open('last_person_id.txt', 'r').read()))
         except (FileNotFoundError, ValueError):
             start_person_id = self.master_start_id
         for person_id in range(start_person_id, self.person_end_id + 1):
@@ -100,4 +103,8 @@ class ParserVKR:
         :return: response
         """
 
-        return requests.get(url, headers={'User-Agent': self.user_agent}, timeout=10)
+        return requests.get(
+            url,
+            headers={
+                'User-Agent': self.user_agent},
+            timeout=10)

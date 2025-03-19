@@ -68,7 +68,10 @@ async def get_summary(
     ticket = await TicketsCrud.create(
         session=session, ticket_type='Суммаризация', user_id=user.id, status_id=0
     )
-    task = get_llm_summary_result.delay(main_text=text_list, user_id=user.id, ticket_id=ticket.id)
+    task = get_llm_summary_result.delay(
+        main_text=text_list,
+        user_id=user.id,
+        ticket_id=ticket.id)
     return json.dumps(task.id)
 
 

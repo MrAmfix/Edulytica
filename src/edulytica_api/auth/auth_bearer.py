@@ -122,4 +122,6 @@ class AuthDataGetterFromToken:
 refresh_token_auth = AuthDataGetterFromToken(
     token_type=REFRESH_TOKEN_TYPE,
     secret_key=JWT_REFRESH_SECRET_KEY)
-access_token_auth = AuthDataGetterFromToken(token_type=ACCESS_TOKEN_TYPE, secret_key=JWT_SECRET_KEY)
+access_token_auth = AuthDataGetterFromToken(
+    token_type=ACCESS_TOKEN_TYPE,
+    secret_key=JWT_SECRET_KEY)

@@ -152,7 +152,9 @@ class CrudFactory:
         Returns:
             Schema: The updated record as a Pydantic model.
         """
-        clean_kwargs = {key: value for key, value in kwargs.items() if value is not None}
+        clean_kwargs = {
+            key: value for key,
+            value in kwargs.items() if value is not None}
         await session.execute(update(cls.base_model).where(cls.base_model.id == record_id).values(**clean_kwargs))
         await session.commit()
         instance = await cls.get_by_id(session, record_id)
